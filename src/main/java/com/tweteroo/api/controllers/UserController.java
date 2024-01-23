@@ -55,4 +55,17 @@ public class UserController {
     userRepository.deleteById(id);
   }
 
+  @PutMapping("/{id}")
+  public void putUser(@PathVariable("id") @NonNull Long id, @RequestBody @Valid UserDTO entity) {
+    Optional<UserModel> user = userRepository.findById(id);
+
+    if (!user.isPresent()) {
+      // return user.empty(); ==> TODO: it'll be treated soon
+    }
+
+    UserModel newUser = new UserModel(entity);
+    newUser.setId(id);
+    userRepository.save(newUser);
+  }
+
 }
