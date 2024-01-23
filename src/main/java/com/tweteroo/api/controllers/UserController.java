@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tweteroo.api.dtos.UserDTO;
 import com.tweteroo.api.models.UserModel;
-import com.tweteroo.api.repositories.UserRepository;
 import com.tweteroo.api.services.UserService;
 
 import jakarta.validation.Valid;
