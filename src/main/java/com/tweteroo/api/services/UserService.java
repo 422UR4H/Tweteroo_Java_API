@@ -18,8 +18,11 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-  public UserModel create(UserDTO dto) {
-    return userRepository.save(new UserModel(dto));
+  public Optional<UserModel> create(UserDTO dto) {
+    if (userRepository.existsByUsername(dto.getUsername())) {
+      return Optional.empty();
+    }
+    return Optional.of(userRepository.save(new UserModel(dto)));
   }
 
   public List<UserModel> findAll() {

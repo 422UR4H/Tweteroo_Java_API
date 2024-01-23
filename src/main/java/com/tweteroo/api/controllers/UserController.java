@@ -33,8 +33,12 @@ public class UserController {
 
   @PostMapping
   public ResponseEntity<Object> postUser(@RequestBody @Valid UserDTO entity) {
-    UserModel user = userService.create(entity);
-    return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    Optional<UserModel> user = userService.create(entity);
+
+    if (!user.isPresent()) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Repeated username");
+    }
+    return ResponseEntity.status(HttpStatus.CREATED).body(user.get());
   }
 
   @GetMapping
