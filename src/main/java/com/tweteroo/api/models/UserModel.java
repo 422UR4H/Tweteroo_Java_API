@@ -1,5 +1,7 @@
 package com.tweteroo.api.models;
 
+import com.tweteroo.api.dtos.UserDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,4 +27,9 @@ public class UserModel {
 
   @Column(nullable = false, length = 100)
   private String username;
+
+  public UserModel(UserDTO dto) {
+    this.avatar = dto.getAvatar();
+    this.username = dto.getUsername();
+  }
 }
