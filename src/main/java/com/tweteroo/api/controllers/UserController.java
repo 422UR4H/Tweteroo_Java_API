@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-
 
 @RestController
 @RequestMapping("users")
@@ -31,8 +32,9 @@ public class UserController {
   }
 
   @PostMapping
-  public void postUser(@RequestBody @Valid UserDTO entity) {
-    userRepository.save(new UserModel(entity));
+  public ResponseEntity<Object> postUser(@RequestBody @Valid UserDTO entity) {
+    UserModel user = userRepository.save(new UserModel(entity));
+    return ResponseEntity.status(HttpStatus.CREATED).body(user);
   }
 
   @GetMapping
@@ -41,31 +43,36 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public Optional<UserModel> getUserById(@PathVariable("id") @NonNull Long id) {
+  public ResponseEntity<Object> getUserById(@PathVariable("id") @NonNull Long id) {
     Optional<UserModel> user = userRepository.findById(id);
 
     if (!user.isPresent()) {
-      return Optional.empty();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    return Optional.of(user.get());
+    return ResponseEntity.status(HttpStatus.OK).body(user.get());
   }
 
   @DeleteMapping("/{id}")
-  public void deleteUser(@PathVariable("id") @NonNull Long id) {
-    userRepository.deleteById(id);
-  }
-
-  @PutMapping("/{id}")
-  public void putUser(@PathVariable("id") @NonNull Long id, @RequestBody @Valid UserDTO entity) {
+  public ResponseEntity<Object> deleteUser(@PathVariable("id") @NonNull Long id) {
     Optional<UserModel> user = userRepository.findById(id);
 
     if (!user.isPresent()) {
-      // return user.empty(); ==> TODO: it'll be treated soon
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+    userRepository.deleteById(id);
+    return ResponseEntity.status(HttpStatus.OK).body(user);
+  }
 
+  @PutMapping("/{id}")
+  public ResponseEntity<Object> putUser(@PathVariable("id") @NonNull Long id, @RequestBody @Valid UserDTO entity) {
+    if (!userRepository.findById(id).isPresent()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
     UserModel newUser = new UserModel(entity);
     newUser.setId(id);
-    userRepository.save(newUser);
+
+    UserModel response = userRepository.save(newUser);
+    return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
 }
