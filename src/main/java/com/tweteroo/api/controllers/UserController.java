@@ -9,12 +9,17 @@ import com.tweteroo.api.repositories.UserRepository;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
+@RequestMapping("users")
 public class UserController {
   final UserRepository userRepository;
 
@@ -22,14 +27,24 @@ public class UserController {
     this.userRepository = userRepository;
   }
 
-  @PostMapping("users")
+  @PostMapping
   public void postUser(@RequestBody @Valid UserDTO entity) {
     userRepository.save(new UserModel(entity));
   }
 
-  @GetMapping("users")
+  @GetMapping
   public List<UserModel> getAllUsers() {
     return userRepository.findAll();
+  }
+
+  @GetMapping("/{id}")
+  public Optional<UserModel> getUserById(@PathVariable("id") @NonNull Long id) {
+    Optional<UserModel> user = userRepository.findById(id);
+    
+    if (!user.isPresent()) {
+      return Optional.empty();
+    }
+    return Optional.of(user.get());
   }
 
 }
