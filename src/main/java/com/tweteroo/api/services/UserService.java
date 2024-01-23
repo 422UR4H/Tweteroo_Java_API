@@ -33,8 +33,14 @@ public class UserService {
     return userRepository.findById(id);
   }
 
-  public void deleteById(@NonNull Long id) {
+  public Optional<UserModel> deleteById(@NonNull Long id) {
+    Optional<UserModel> user = userRepository.findById(id);
+
+    if (!user.isPresent()) {
+      return Optional.empty();
+    }
     userRepository.deleteById(id);
+    return user;
   }
 
   public UserModel update(@NonNull Long id, UserDTO dto) {
