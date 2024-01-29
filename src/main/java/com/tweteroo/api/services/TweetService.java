@@ -1,5 +1,6 @@
 package com.tweteroo.api.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -31,5 +32,9 @@ public class TweetService {
       return Optional.empty();
     }
     return Optional.of(tweetRepository.save(new TweetModel(dto, user.get())));
+  }
+
+  public List<TweetModel> findAll() {
+    return tweetRepository.findAll();
   }
 }

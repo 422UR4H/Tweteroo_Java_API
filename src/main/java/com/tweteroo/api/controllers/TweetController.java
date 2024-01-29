@@ -9,12 +9,14 @@ import com.tweteroo.api.services.TweetService;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
@@ -34,5 +36,10 @@ public class TweetController {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
     return ResponseEntity.status(HttpStatus.CREATED).body(tweet.get());
+  }
+
+  @GetMapping
+  public List<TweetModel> getAllTweets() {
+      return tweetService.findAll();
   }
 }
