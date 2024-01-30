@@ -4,6 +4,7 @@ import lombok.Data;
 
 import com.tweteroo.api.dtos.TweetDTO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,13 +29,12 @@ public class TweetModel {
   @Column(nullable = false, length = 280)
   private String text;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "userId", nullable = false)
   private UserModel user;
 
   public TweetModel(TweetDTO dto) {
     this.text = dto.getText();
-    // this.user.setId(dto.getUserId());
   }
 
   public TweetModel(TweetDTO dto, UserModel user) {

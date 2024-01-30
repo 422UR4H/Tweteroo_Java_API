@@ -25,7 +25,7 @@ public class UserModel {
   @Column(nullable = false)
   private String avatar;
 
-  @Column(nullable = false, length = 100)
+  @Column(nullable = false, length = 100, unique = true)
   private String username;
 
   public UserModel(UserDTO dto) {
