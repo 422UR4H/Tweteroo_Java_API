@@ -33,10 +33,6 @@ public class TweetModel {
   @JoinColumn(name = "userId", nullable = false)
   private UserModel user;
 
-  public TweetModel(TweetDTO dto) {
-    this.text = dto.getText();
-  }
-
   public TweetModel(TweetDTO dto, UserModel user) {
     this.text = dto.getText();
     this.user = user;
