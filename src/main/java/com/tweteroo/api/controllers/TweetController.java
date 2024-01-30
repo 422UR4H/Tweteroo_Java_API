@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("tweets")
@@ -40,6 +40,11 @@ public class TweetController {
 
   @GetMapping
   public List<TweetModel> getAllTweets() {
-      return tweetService.findAll();
+    return tweetService.findAll();
+  }
+
+  @GetMapping("/user/{userId}")
+  public List<TweetModel> getTweetsByUserId(@PathVariable("userId") Long userId) {
+    return tweetService.findByUserId(userId);
   }
 }
