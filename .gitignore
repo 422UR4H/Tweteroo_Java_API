@@ -3,8 +3,12 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+### Properties & Environment ###
 **application.properties
 !**application.properties.example
+.env
+!.env.example
 
 ### STS ###
 .apt_generated
