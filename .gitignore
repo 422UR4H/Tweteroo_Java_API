@@ -4,9 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### Properties & Environment ###
-**application.properties
-!**application.properties.example
+### Environment ###
 .env
 !.env.example
 
