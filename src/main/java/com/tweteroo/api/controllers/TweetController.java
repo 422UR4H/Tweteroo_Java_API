@@ -1,5 +1,12 @@
 package com.tweteroo.api.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,15 +17,6 @@ import com.tweteroo.api.services.TweetService;
 import jakarta.validation.Valid;
 
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -31,13 +29,9 @@ public class TweetController {
   }
 
   @PostMapping
-  public ResponseEntity<Object> postTweet(@RequestBody @Valid TweetDTO tweetDTO) {
-    Optional<TweetModel> tweet = tweetService.create(tweetDTO);
-
-    if (!tweet.isPresent()) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-    return ResponseEntity.status(HttpStatus.CREATED).body(tweet.get());
+  public ResponseEntity<TweetModel> postTweet(@RequestBody @Valid TweetDTO tweetDTO) {
+    TweetModel tweet = tweetService.create(tweetDTO);
+    return ResponseEntity.status(HttpStatus.CREATED).body(tweet);
   }
 
   @GetMapping

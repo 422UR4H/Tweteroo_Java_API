@@ -1,11 +1,12 @@
 package com.tweteroo.api.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.tweteroo.api.dtos.TweetDTO;
+import com.tweteroo.api.exceptions.UnprocessableUserIdException;
+import com.tweteroo.api.exceptions.UserNotFoundException;
 import com.tweteroo.api.models.TweetModel;
 import com.tweteroo.api.models.UserModel;
 import com.tweteroo.api.repositories.TweetRepository;
@@ -21,17 +22,17 @@ public class TweetService {
     this.userRepository = userRepository;
   }
 
-  public Optional<TweetModel> create(TweetDTO dto) {
+  public TweetModel create(TweetDTO dto) {
     Long userId = dto.getUserId();
+
     if (userId == null) {
-      return Optional.empty();
+      throw new UnprocessableUserIdException();
     }
 
-    Optional<UserModel> user = userRepository.findById(userId);
-    if (!user.isPresent()) {
-      return Optional.empty();
-    }
-    return Optional.of(tweetRepository.save(new TweetModel(dto, user.get())));
+    UserModel user = userRepository.findById(userId).orElseThrow(() -> {
+      throw new UserNotFoundException();
+    });
+    return tweetRepository.save(new TweetModel(dto, user));
   }
 
   public List<TweetModel> findAll() {

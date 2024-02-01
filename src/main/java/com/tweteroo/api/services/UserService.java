@@ -1,12 +1,13 @@
 package com.tweteroo.api.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.tweteroo.api.dtos.UserDTO;
+import com.tweteroo.api.exceptions.ConflictUsernameException;
+import com.tweteroo.api.exceptions.UserNotFoundException;
 import com.tweteroo.api.models.UserModel;
 import com.tweteroo.api.repositories.UserRepository;
 
@@ -18,36 +19,35 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-  public Optional<UserModel> create(UserDTO dto) {
+  public UserModel create(UserDTO dto) {
     if (userRepository.existsByUsername(dto.getUsername())) {
-      return Optional.empty();
+      throw new ConflictUsernameException();
     }
-    return Optional.of(userRepository.save(new UserModel(dto)));
+    return userRepository.save(new UserModel(dto));
   }
 
   public List<UserModel> findAll() {
     return userRepository.findAll();
   }
 
-  public Optional<UserModel> findById(@NonNull Long id) {
-    return userRepository.findById(id);
+  public UserModel findById(@NonNull Long id) {
+    return userRepository.findById(id).orElseThrow(() -> {
+      throw new UserNotFoundException();
+    });
   }
 
-  public Optional<UserModel> deleteById(@NonNull Long id) {
-    Optional<UserModel> user = userRepository.findById(id);
-
-    if (!user.isPresent()) {
-      return Optional.empty();
-    }
+  public UserModel deleteById(@NonNull Long id) {
+    UserModel user = userRepository.findById(id).orElseThrow(() -> {
+      throw new UserNotFoundException();
+    });
     userRepository.deleteById(id);
     return user;
   }
 
   public UserModel update(@NonNull Long id, UserDTO dto) {
-    UserModel newUser = new UserModel(dto);
-    newUser.setId(id);
+    UserModel user = new UserModel(dto);
+    user.setId(id);
 
-    UserModel response = userRepository.save(newUser);
-    return response;
+    return userRepository.save(user);
   }
 }

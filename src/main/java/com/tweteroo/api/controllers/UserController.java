@@ -9,7 +9,6 @@ import com.tweteroo.api.services.UserService;
 import jakarta.validation.Valid;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,13 +33,9 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity<Object> postUser(@RequestBody @Valid UserDTO entity) {
-    Optional<UserModel> user = userService.create(entity);
-
-    if (!user.isPresent()) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("Repeated username");
-    }
-    return ResponseEntity.status(HttpStatus.CREATED).body(user.get());
+  public ResponseEntity<UserModel> postUser(@RequestBody @Valid UserDTO entity) {
+    UserModel user = userService.create(entity);
+    return ResponseEntity.status(HttpStatus.CREATED).body(user);
   }
 
   @GetMapping
@@ -49,30 +44,19 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Object> getUserById(@PathVariable("id") @NonNull Long id) {
-    Optional<UserModel> user = userService.findById(id);
-
-    if (!user.isPresent()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-    return ResponseEntity.status(HttpStatus.OK).body(user.get());
+  public ResponseEntity<UserModel> getUserById(@PathVariable("id") @NonNull Long id) {
+    UserModel user = userService.findById(id);
+    return ResponseEntity.status(HttpStatus.OK).body(user);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Object> deleteUser(@PathVariable("id") @NonNull Long id) {
-    Optional<UserModel> user = userService.deleteById(id);
-
-    if (!user.isPresent()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
+  public ResponseEntity<UserModel> deleteUser(@PathVariable("id") @NonNull Long id) {
+    UserModel user = userService.deleteById(id);
     return ResponseEntity.status(HttpStatus.OK).body(user);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Object> putUser(@PathVariable("id") @NonNull Long id, @RequestBody @Valid UserDTO entity) {
-    if (!userService.findById(id).isPresent()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
+  public ResponseEntity<UserModel> putUser(@PathVariable("id") @NonNull Long id, @RequestBody @Valid UserDTO entity) {
     UserModel user = userService.update(id, entity);
     return ResponseEntity.status(HttpStatus.OK).body(user);
   }
