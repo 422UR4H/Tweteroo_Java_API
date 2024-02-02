@@ -8,7 +8,7 @@ This is my second Web Service build in Java with Spring Boot and Maven for pract
 
 # Demo
 
-[Tweteroo API Link Deployed on Render](https://boardcamp-java-api.onrender.com)
+### [Tweteroo API Link Deployed on Render](https://boardcamp-java-api.onrender.com)
 
 <br />
 
@@ -44,7 +44,7 @@ Owns the entities: `user` and `tweet`.
 
 - POST `/users`: To create a user with the body:
 
-```http
+```yml
 {
   username: "your username",
   avatar: "https://your-avatar-icon.com"
@@ -61,7 +61,7 @@ Owns the entities: `user` and `tweet`.
 
 - POST `/tweets`: To create a user with the body:
 
-```http
+```yml
 {
   userId: 1,
   text: "text of the tweet"
