@@ -35,12 +35,12 @@ public class TweetController {
   }
 
   @GetMapping
-  public List<TweetModel> getAllTweets() {
-    return tweetService.findAll();
+  public ResponseEntity<List<TweetModel>> getAllTweets() {
+    return ResponseEntity.status(HttpStatus.OK).body(tweetService.findAll());
   }
 
   @GetMapping("/user/{userId}")
-  public List<TweetModel> getTweetsByUserId(@PathVariable("userId") Long userId) {
-    return tweetService.findByUserId(userId);
+  public ResponseEntity<List<TweetModel>> getTweetsByUserId(@PathVariable("userId") Long userId) {
+    return ResponseEntity.status(HttpStatus.OK).body(tweetService.findByUserId(userId));
   }
 }
